@@ -1,7 +1,7 @@
 const { urlencoded } = require('body-parser')
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 5000
 
 app.use(express.json())
 app.use(urlencoded({extended:true}))
@@ -13,6 +13,11 @@ client.connect(err => {
   const collection = client.db("test").collection("devices");
   client.close();
 });
+
+MongoClient.connect(uri, (err, client) => {
+    if (err) return console.error(err)
+    console.log('Connected to Database')
+  })
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
