@@ -24,9 +24,15 @@ export default class Home extends Component{
 
     callAPI(){
         let value=this.state.value;
-        fetch("http://localhost:5000/"+value)
-            .then(res => res.text())
-            .then(res => this.setState({ apiResponse: res }));  
+        fetch("http://localhost:5000/:"+value)
+            .then(res => res.json())
+            .then(res => {
+                let url = res.url;
+                window.location.href = url;
+            })
+            .catch(err =>{
+                console.log(err);
+            });  
     }
     // componentDidMount()
     // {
