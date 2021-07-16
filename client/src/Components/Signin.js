@@ -21,8 +21,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" to='/'>
+        Soap Search
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: 'rgb(62 204 137)',
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -47,8 +47,27 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    '&:hover':{
+      backgroundColor: 'rgb(62 204 137)'
+    }
   },
 }));
+
+// const styles = theme => ({
+//   btnStyle: {
+//     borderRadius: "10px",
+//     color: "black",
+//     textTransform: "none",
+//     backgroundColor: "rgb(231 231 231)",
+//     padding: "12px 16px",
+//     fontSize: "14px",
+//     margin:"auto 20px",
+//     boxShadow:"none",
+//   '&:hover': {
+//     backgroundColor: 'rgb(62 204 137)'
+//   }
+//   },
+// });
 
  function SignIn() {
   const classes = useStyles();
@@ -94,7 +113,6 @@ const useStyles = makeStyles((theme) => ({
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
             className={classes.submit}
           >
             Sign In

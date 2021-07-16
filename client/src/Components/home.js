@@ -1,9 +1,30 @@
 import SearchBar from "material-ui-search-bar";
 import React, { Component } from "react";
+import 'D:/Projects/Soap-Search/soap_search/client/src/Components/styles/home.css'
+import Typography from '@material-ui/core/Typography';
 //import axios from 'axios';
+import { withStyles } from '@material-ui/styles';
+import { Link } from 'react-router-dom'
+import { Button } from "@material-ui/core";
+
+const styles = theme => ({
+  btnStyle: {
+    borderRadius: "10px",
+    color: "black",
+    textTransform: "none",
+    backgroundColor: "rgb(231 231 231)",
+    padding: "12px 16px",
+    fontSize: "14px",
+    margin:"auto 20px",
+    boxShadow:"none",
+  '&:hover': {
+    backgroundColor: 'rgb(62 204 137)'
+  }
+  },
+});
 
 // *snip*
-export default class Home extends Component{
+class Home extends Component{
     constructor(props){
         super(props);
         this.state={
@@ -13,12 +34,8 @@ export default class Home extends Component{
         this.callAPI=this.callAPI.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
     }
-    // handleRequest(event) {    
-    //     // console.log(this.state.value);
-    //     event.preventDefault();
-    //   };
+    
     handleOnChange(newValue){
-        console.log(newValue);
         this.setState({value:newValue});
     }
 
@@ -34,19 +51,54 @@ export default class Home extends Component{
                 console.log(err);
             });  
     }
-    // componentDidMount()
-    // {
-    //     this.callAPI();
-    // }
+    
     render(){
-        // let reactData=this.state.props;
-        // let url="localhost:5000/SearchBar";
-return (
-    <SearchBar
-    value={this.state.value}
-    onChange={this.handleOnChange}
-    onRequestSearch= {this.callAPI}
-    />
-);
+        const {classes} = this.props;
+        return (
+            <div style={{"height":"100vh"}} class="main-body">
+                <div className="searchConatiner">
+                    <Typography align="center" classes={{
+                            root: classes.root
+                        }} variant="h2" gutterBottom>
+                        <span class="soap">soap</span><span class="search-text">Search</span>
+                </Typography>
+                    <SearchBar
+                    className="searchbar"
+                    value={this.state.value}
+                    onChange={this.handleOnChange}
+                    onRequestSearch= {this.callAPI}
+                    placeholder="Search your favorite movie"
+                    cancelOnEscape={true}
+                    />
+                    <p>To track search history Login</p>
+                    <div class="main-body">
+                    <Link 
+                    style={{textDecoration:"none"}}
+                    to='/signin'>
+                        <Button 
+                        className={classes.btnStyle}
+                        type="submit"
+                        variant="contained"
+                        color="secondary"
+                        >SignIn</Button>
+                        </Link>
+                        <Link 
+                    style={{textDecoration:"none"}}
+                    to='/signup'>
+                        <Button 
+                        className={classes.btnStyle}
+                        type="submit"
+                        variant="contained"
+                        color="secondary"
+                        >SignUp</Button>
+                        </Link>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        );
 }
 }
+
+export default  withStyles(styles)(Home);
