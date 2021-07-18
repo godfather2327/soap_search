@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Link } from 'react-router-dom'
-
+import Icons from './icon';
 //import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -15,6 +15,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withRouter } from "react-router";
+import {GoogleLogin} from "react-google-login";
+import { Icon } from '@material-ui/core';
+import { useEffect, useState } from "react";
 //import Signup from './Signup';
 
 function Copyright() {
@@ -68,9 +71,57 @@ const useStyles = makeStyles((theme) => ({
 //   }
 //   },
 // });
-
- function SignIn() {
+const initialState={email:'',password:''};
+function SignIn() {
   const classes = useStyles();
+  const [formData,setFormData]=useState(initialState);
+
+  const handleSubmit=(e)=>
+{
+  e.preventDefault();
+  console.log(formData);
+  return fetch('http://localhost:5000/stored',{
+      method:'POST',
+      body: JSON.stringify(formData),
+      headers:{
+        'Content-Type':'application/json'
+      },
+    })
+    .then(res=>res.json())
+    .then(data=>console.log(data));
+  
+};
+
+const handleChange=(e)=>
+{
+  setFormData({...formData,[e.target.name]: e.target.value});
+}
+  const googleSuccess= async(res)=>{
+    const result =res ?.profileObj;
+    const token= res?.tokenId;
+    const name=result?.name;
+    const mail=result?.email;
+    // console.log(token);  
+    console.log(name,mail);
+    const data={
+      name,
+      mail,
+    }
+    return fetch('http://localhost:5000/stored',{
+      method:'POST',
+      body: JSON.stringify(data),
+      headers:{
+        'Content-Type':'application/json'
+      },
+    })
+    .then(res=>res.json())
+    .then(data=>console.log(data));
+  
+    
+  };
+  const googleFailure=()=>{
+    console.log("Google Sign In was Unsuccessful .")
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -82,7 +133,7 @@ const useStyles = makeStyles((theme) => ({
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -93,6 +144,7 @@ const useStyles = makeStyles((theme) => ({
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -104,10 +156,28 @@ const useStyles = makeStyles((theme) => ({
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={handleChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
+          />
+          <GoogleLogin
+            clientId="383691205237-7fdptrv5md4h1n45jdln7j5rnpr8tb8c.apps.googleusercontent.com"
+            render={(renderProps)=>(
+              <Button 
+              className={classes.googleButton} 
+              color='primary' 
+              fullWidth 
+              onClick={renderProps.onClick} 
+              disabled={renderProps.disabled} 
+              startIcon={<Icons />} 
+              varient="contained">
+                Google Sign In
+              </Button>)}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy="single_host_origin"
           />
           <Button
             type="submit"

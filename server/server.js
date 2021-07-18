@@ -38,12 +38,12 @@ app.use(function(req, res, next) {
     next();
   });
 
+//MongoDB
 const { MongoClient } = require('mongodb');
 const uri = "mongodb+srv://webbew:mongodbwebbew@api.51jhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const collection = client.db("test").collection("devices"); 
-  client.close();
 })
 
 MongoClient.connect(uri, (err, client) => {
@@ -57,6 +57,17 @@ app.get('/:search', async (req, res) => {
     res.send({"url":'https://soap2day.ac/search/keyword/'+se});
   })
 
+app.post('/stored',function(req,res){
+  console.log(req.body);
+  MongoClient.connect(uri, (err, client) => {
+    var db =client.db('soap_search')
+    db.collection('users').insertOne(req.body,(err,data)=>{
+    if(err) return conole.log(err);
+    res.send('saved to db'+data)
+  })
+  })
+  
+})
   
 
 app.listen(port, () => {
